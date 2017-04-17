@@ -9,10 +9,13 @@ using UnityEngine;
  * Seperate from the MonoBehavior class to assist in testing
  * and code reusability.
  */
+
 public class PlayerController {
 
-    public float mouseSensitivity = 5f;
-    public float updownRange = 50.0f;
+    public float mouseSensitivity;
+    public float cameraROM;
+
+    float rotationY = 0.0f;
 
 
     GameObject player;
@@ -34,29 +37,14 @@ public class PlayerController {
 
     public void Rotate()
     {
-        Vector2 mouseDeltas = new Vector2(
-            Input.GetAxis("Mouse X") * mouseSensitivity,
-            Input.GetAxis("Mouse Y") * mouseSensitivity);
+        //Rotate the player left and right
+        player.transform.Rotate(Vector3.up, Input.GetAxis("Mouse X") * mouseSensitivity);
 
-        player.transform.Rotate(Vector3.up, mouseDeltas.x);
-        camera.transform.Rotate(Vector3.left, mouseDeltas.y);
-        //ClampCamera();
-    }
+        //Rotate the camera and clamp the motion
+        rotationY += Input.GetAxis("Mouse Y") * mouseSensitivity;
+        rotationY = Mathf.Clamp(rotationY, -1 * cameraROM, cameraROM);
 
-    //Don't like this one. Seems poorly done. TODO: Fix, currently broken
-    public void ClampCamera()
-    {
-        Vector3 angles = camera.transform.localRotation.eulerAngles;
-        if(angles.x > 40)
-        {
-
-            angles.x = 40;
-        } else if(angles.x - 360 < -40)
-        {
-
-            angles.x = 320;
-        }
-        camera.transform.localRotation = Quaternion.Euler(angles);
+        camera.transform.localEulerAngles = new Vector3(-rotationY, 0, 0);
     }
 
     public void MovePlayer()
