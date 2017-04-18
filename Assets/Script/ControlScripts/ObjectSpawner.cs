@@ -31,6 +31,6 @@ public class ObjectSpawner {
 
     public void SpawnSphere()
     {
-
+        SpawnedSphere.CreateFromPrefab(player.transform);
     }
 }

@@ -12,13 +12,14 @@ public class SpawnedCube : MonoBehaviour {
     public static void CreateFromPrefab(Transform spawner)
     {
         SpawnedCube cube = Instantiate(prefab);
+        cube.transform.parent = GameObject.Find("Cubes").transform;
 
-        Vector3 location = cube.transform.position;
-        location.x = spawner.position.x;
-        location.z = spawner.position.z + GameValues.Spawners.spawnDistance;
+        cube.transform.rotation = spawner.rotation;
 
-        cube.transform.position = location; 
-    } 
+        Vector3 position = spawner.position +
+            (spawner.forward * GameValues.Spawners.spawnDistance);
+        position.y = GameValues.Spawners.cubeHeight / 2;
 
-
+        cube.transform.position = position;
+    }
 }
